@@ -1,0 +1,12 @@
+import mongoose from "mongoose";
+
+const connectDB = async () => {
+    try {
+        await mongoose.connect(process.env.MONGO_URI!);
+    } catch (error) {
+        console.error("Failed to connect to MongoDB", error);
+        throw error;
+    }
+};
+
+export default connectDB;
