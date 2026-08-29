@@ -30,15 +30,21 @@ export const isAuth = async (
 
     if (!token) {
       res.status(401).json({
-        message: "Please Login - Token missing",
+        message: "Please Login - Missing token",
       });
       return;
     }
 
-    const decodedValue = jwt.verify(
-      token,
-      process.env.JWT_SECRET as string
-    ) as JwtPayload;
+    const jwtSecret = process.env.JWT_SECRET;
+
+    if (!jwtSecret) {
+      res.status(500).json({
+        message: "Server configuration error",
+      });
+      return;
+    }
+
+    const decodedValue = jwt.verify(token, jwtSecret) as JwtPayload;
 
     if (!decodedValue || !decodedValue.user) {
       res.status(401).json({
